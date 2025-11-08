@@ -20,14 +20,58 @@ const { NotImplementedError } = require('../lib');
  *
  */
 class VigenereCipheringMachine {
-  encrypt() {
-    // Remove line below and write your code here
-    throw new NotImplementedError('Not implemented');
+  constructor(direct = true) {
+    this.isDirect = direct;
   }
 
-  decrypt() {
-    // Remove line below and write your code here
-    throw new NotImplementedError('Not implemented');
+  encrypt(message, key) {
+    if (!message || !key) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    return this._processText(message, key, 'encrypt');
+  }
+
+  decrypt(encryptedMessage, key) {
+    if (!encryptedMessage || !key) {
+      throw new Error('Incorrect arguments!');
+    }
+
+    return this._processText(encryptedMessage, key, 'decrypt');
+  }
+
+  _processText(text, key, mode) {
+    const upperText = text.toUpperCase();
+    const upperKey = key.toUpperCase();
+    let result = '';
+    let keyIndex = 0;
+
+    for (let i = 0; i < upperText.length; i++) {
+      const currentChar = upperText[i];
+
+      if (this._isLatinLetter(currentChar)) {
+        const textCode = currentChar.charCodeAt(0) - 65;
+        const keyCode = upperKey[keyIndex % upperKey.length].charCodeAt(0) - 65;
+
+        let processedCode;
+        if (mode === 'encrypt') {
+          processedCode = (textCode + keyCode) % 26;
+        } else {
+          processedCode = (textCode - keyCode + 26) % 26;
+        }
+
+        result += String.fromCharCode(processedCode + 65);
+        keyIndex++;
+      } else {
+        result += currentChar;
+      }
+    }
+
+    return this.isDirect ? result : result.split('').reverse().join('');
+  }
+
+  _isLatinLetter(char) {
+    return char >= 'A' && char <= 'Z';
   }
 }
 

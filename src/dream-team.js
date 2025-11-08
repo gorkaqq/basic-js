@@ -13,11 +13,24 @@ const { NotImplementedError } = require('../lib');
  * createDreamTeam(['Olivia', 1111, 'Lily', 'Oscar', true, null]) => 'LOO'
  *
  */
-function createDreamTeam(/* members */) {
-  // Remove line below and write your code here
-  throw new NotImplementedError('Not implemented');
+function createDreamTeam(members) {
+  if (!(members instanceof Array)) {
+    return false;
+  }
+  const dreamArr = [];
+
+  for (let i = 0; i < members.length; i++) {
+    const currentEl = members[i];
+    if (typeof currentEl !== 'string') {
+      continue;
+    } else {
+      dreamArr.push(currentEl.trim()[0].toUpperCase());
+    }
+  }
+
+  return dreamArr.sort().join('');
 }
 
 module.exports = {
-  createDreamTeam
+  createDreamTeam,
 };

@@ -14,11 +14,20 @@ const { NotImplementedError } = require('../lib');
  * For 00-1B-63-84-45-E6, the output should be true.
  *
  */
-function isMAC48Address(/* n */) {
-  // Remove line below and write your code here
-  throw new NotImplementedError('Not implemented');
+function isMAC48Address(inputString) {
+  const validChars = new Set('0123456789ABCDEF-');
+
+  for (let i = 0; i < inputString.length; i++) {
+    if (!validChars.has(inputString[i])) return false;
+  }
+
+  for (let i = 2; i < 15; i += 3) {
+    if (inputString[i] !== '-') return false;
+  }
+
+  return true;
 }
 
 module.exports = {
-  isMAC48Address
+  isMAC48Address,
 };
